@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Git / editor
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Local runtime data
+.env
+.env.*
+mlruns/
+models/
+reports/
+data/raw/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

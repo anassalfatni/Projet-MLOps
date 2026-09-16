@@ -1,0 +1,53 @@
+# =========================================================
+# Configuration du pipeline - Analyse de sentiment DistilBERT
+# =========================================================
+
+data:
+  dataset_name: "cornell-movie-review-data/rotten_tomatoes"
+  raw_data_dir: "data/raw"
+
+model:
+  checkpoint: "distilbert-base-uncased"
+  num_labels: 2
+  id2label:
+    0: "NEGATIVE"
+    1: "POSITIVE"
+  label2id:
+    NEGATIVE: 0
+    POSITIVE: 1
+  max_length: 128
+
+preprocessing:
+  tokenized_data_dir: "data/processed"
+  tokenizer_dir: "models/tokenizer"
+
+training:
+  output_dir: "models/distilbert-sentiment"
+  learning_rate: 2.0e-5
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 16
+  num_train_epochs: 2
+  weight_decay: 0.01
+  eval_strategy: "epoch"
+  save_strategy: "epoch"
+  load_best_model_at_end: true
+  metric_for_best_model: "accuracy"
+  report_to: "none"
+  push_to_hub_during_training: false   # push direct via Trainer (optionnel)
+
+evaluation:
+  results_path: "reports/eval_results.json"
+
+hub:
+  repo_id: "Anasft9/distilbert-sentiment-demo"
+
+app:
+  # "local" charge le modèle depuis training.output_dir
+  # "hub" charge le modèle depuis hub.repo_id
+  # En conteneur, il est plus portable de choisir "hub" pour éviter de livrer les poids du modèle.
+  model_source: "hub"
+
+mlflow:
+  tracking_uri: "file:./mlruns"
+  experiment_name: "sentiment-analysis-distilbert"
+  inference_experiment_name: "sentiment-analysis-inference"

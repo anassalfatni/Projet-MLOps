@@ -1,0 +1,15 @@
+# Secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Données / artefacts
+data/
+models/
+reports/
+mlruns/

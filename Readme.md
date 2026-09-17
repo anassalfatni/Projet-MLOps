@@ -112,12 +112,3 @@ L'app sera accessible sur http://localhost:8501
 > Le projet est désormais configuré pour charger le modèle depuis le Hub dans
 > le conteneur, ce qui évite d’intégrer les poids du modèle dans l’image.
 
-## Différences par rapport au notebook Colab d'origine
-
-- Le notebook monolithique est découpé en étapes indépendantes et réutilisables.
-- Tous les paramètres (dataset, checkpoint, hyperparamètres, chemins, repo Hub)
-  sont centralisés dans `config.yaml`.
-- Chaque étape sauvegarde ses artefacts sur disque, pour permettre de relancer
-  uniquement l'étape nécessaire (pas besoin de retélécharger ou retokenizer
-  à chaque entraînement).
-- L'interface de démonstration passe de **Gradio** à **Streamlit**.

@@ -13,3 +13,4 @@ data/
 models/
 reports/
 mlruns/
+mlflow.db

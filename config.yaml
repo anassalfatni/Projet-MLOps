@@ -48,6 +48,6 @@ app:
   model_source: "hub"
 
 mlflow:
-  tracking_uri: "file:./mlruns"
+  tracking_uri: "sqlite:///mlflow.db"
   experiment_name: "sentiment-analysis-distilbert"
   inference_experiment_name: "sentiment-analysis-inference"

@@ -29,13 +29,20 @@ def load_classifier(model_source: str, local_dir: str, hub_repo_id: str):
     return pipeline("sentiment-analysis", model=model_path)
 
 
-def log_inference(model_source: str, text: str, label: str, score: float):
+def log_inference(
+    model_source: str,
+    text: str,
+    label: str,
+    score: float,
+    tracking_uri: str,
+    experiment_name: str,
+):
     if mlflow is None:
         return
 
     try:
-        mlflow.set_tracking_uri("file:./mlruns")
-        mlflow.set_experiment("sentiment-analysis-inference")
+        mlflow.set_tracking_uri(tracking_uri)
+        mlflow.set_experiment(experiment_name)
         with mlflow.start_run(run_name="inference"):
             mlflow.log_param("model_source", model_source)
             mlflow.log_param("text_length", len(text))
@@ -57,6 +64,11 @@ def main():
     model_source = config["app"]["model_source"]
     local_dir = config["training"]["output_dir"]
     hub_repo_id = config["hub"]["repo_id"]
+    mlflow_config = config.get("mlflow", {})
+    tracking_uri = mlflow_config.get("tracking_uri", "sqlite:///mlflow.db")
+    inference_experiment_name = mlflow_config.get(
+        "inference_experiment_name", "sentiment-analysis-inference"
+    )
 
     st.title("🎬 Analyse de sentiment")
     st.write("Analysez le sentiment d'un texte avec le modèle DistilBERT fine-tuné.")
@@ -89,7 +101,14 @@ def main():
             else:
                 st.error(f"**Sentiment : {label}** (confiance : {score:.2%})")
 
-            log_inference(model_source, text, label, score)
+            log_inference(
+                model_source,
+                text,
+                label,
+                score,
+                tracking_uri,
+                inference_experiment_name,
+            )
 
             st.progress(score)
             st.json({"label": label, "score": round(score, 4)})
